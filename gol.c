@@ -16,8 +16,8 @@ int h, w;
 int main(int argc, char **argv)
 {
 	//B3/S23 rule
-	B = {3};
-    S = {2, 3};
+	int B = {3};
+    int S = {2, 3};
 	
 	//Check CLI arguments
 	if (argc != 4)
@@ -27,13 +27,13 @@ int main(int argc, char **argv)
 	}
 	
 	//pull filename from CLI argument
-	char* file = argv[1];
+	char* filename = argv[1];
 	
 	//pull width and height for board from command line argument and store into global width and height
 	w = atoi(argv[2]);
     h = atoi(argv[3]);
 	
-	int board[[h][w];
+	int board[h][w];
 	
 	for (int i = 0; i < h; i++)
 	{
@@ -43,26 +43,30 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	
-	if (access( fname, F_OK ) == -1)
+	//if file does not exist
+	if (access( filename, F_OK ) == -1)
 	{
+		//create file
+		FILE *fp;
+		fp = fopen(filename, "w");
+		//fill with periods
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				fprintf('.');
+			}
+			fprintf('\n');
+		}
+		//close file
 		
-		
-		
-		
-	
-	return 0;
+		printf(file + " created.");
+		printf("Open the file in a text editor and change full stops to octothorpes before running this program again.");
+		return 0;
 }
 
 
 
-    if not os.path.isfile("./" + file):
-        setup = open(file, "w")
-
-        for y in range(h):
-            for x in range(w):
-                setup.write('.')
-            setup.write('\n')
 
         #close file
         setup.close()
