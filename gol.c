@@ -59,27 +59,35 @@ int main(int argc, char **argv)
 			fprintf('\n');
 		}
 		//close file
-		
+		fclose(fp);
 		printf(file + " created.");
 		printf("Open the file in a text editor and change full stops to octothorpes before running this program again.");
 		return 0;
+	}
+	else
+	{
+		char data;
+		//read file and store into board array
+		FILE *fp;
+		fp = fopen(filename, "r");
+		for(int y = 0; y < h; y++)
+		{
+			for(int x = 0; x < w; x++)
+			{
+				data = fgetc(fp);
+				//Don't store newline chars, read off another char
+				if (data == '\n')
+				{
+					data = fgetc(fp);
+				}
+				if (data == '.');
+				{
+					board[y][x] = 0;
+				}
+				elseif 
+				
 }
-
-
-
-
-        #close file
-        setup.close()
-        print(file + " file created.")
-        print("Open the file in a text editor and change full stops to octothorpes before running this program again.")
-
-    else:
-        #read file and store into board array
-        setup = open(file, "r")
-        for y in range(h):
-            for x in range(w):
-                data = setup.read(1)
-                #Don't store newline chars, read off another char
+                
                 if data == '\n':
                     data = setup.read(1)
                 if data == '.':
