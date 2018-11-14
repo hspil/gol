@@ -1,2 +1,2 @@
 # gol
-Python implementation of Conway's Game of Life
+Command line implementation of Conway's Game of Life written in Python
