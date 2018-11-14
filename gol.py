@@ -64,6 +64,10 @@ def main(argv):
                     board[y][x] = 0
                 elif data == '#':
                     board[y][x] = 1
+                else
+					setup.close()
+					print("Error: File malformed.")
+					return 2
 
         #close file
         setup.close()
