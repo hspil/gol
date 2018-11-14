@@ -84,29 +84,31 @@ int main(int argc, char **argv)
 				{
 					board[y][x] = 0;
 				}
-				elseif 
-				
+				else if (data = '#')
+				{
+					board[y][x] = 1;
+				}
+				else
+				{
+					fclose(fp);
+					printf("Error: File malformed.\n");
+					return 2;
+				}
+			}
+		}
+		//close file
+		fclose(fp);
+		
+		//primary game loop
+		while (1 == 1)
+		{
+			draw();
+			change(B,S);
+			usleep(250000);
+			printf('\n\n\n');
+		}
 }
-                
-                if data == '\n':
-                    data = setup.read(1)
-                if data == '.':
-                    board[y][x] = 0
-                elif data == '#':
-                    board[y][x] = 1
 
-        #close file
-        setup.close()
-
-        #primary game loop
-        while True:
-            try:
-                draw(board)
-                board = change(board,B,S)
-                time.sleep(0.25)
-                print('\n\n\n')
-            except:
-                return 0
 
 
 def change(board,B,S):    
