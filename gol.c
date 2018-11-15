@@ -6,18 +6,19 @@ Conway's Game of Life
  * Adjustable below.
 ***********************************************************************/
 
-#include <stdio.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <string.h>
 
-//global height and width of board
+//global height and width of board, board
 
 int h, w;
 
 int main(int argc, char **argv)
 {
 	//B3/S23 rule
-	int B = {3};
-    int S = {2, 3};
+	int B[1] = {3};
+    int S[2] = {2, 3};
 	
 	//Check CLI arguments
 	if (argc != 4)
@@ -32,8 +33,8 @@ int main(int argc, char **argv)
 	//pull width and height for board from command line argument and store into global width and height
 	w = atoi(argv[2]);
     h = atoi(argv[3]);
-	
-	int board[h][w];
+    
+    int board[h][w];
 	
 	for (int i = 0; i < h; i++)
 	{
@@ -44,7 +45,7 @@ int main(int argc, char **argv)
 	}
 	
 	//if file does not exist
-	if (access( filename, F_OK ) == -1)
+	if (access(filename, F_OK) == -1)
 	{
 		//create file
 		FILE *fp;
@@ -54,13 +55,13 @@ int main(int argc, char **argv)
 		{
 			for (int x = 0; x < w; x++)
 			{
-				fprintf('.');
+				fprintf(fp, ".");
 			}
-			fprintf('\n');
+			fprintf(fp, "\n");
 		}
 		//close file
 		fclose(fp);
-		printf(file + " created.");
+		printf(filename + " created.");
 		printf("Open the file in a text editor and change full stops to octothorpes before running this program again.");
 		return 0;
 	}
@@ -84,7 +85,7 @@ int main(int argc, char **argv)
 				{
 					board[y][x] = 0;
 				}
-				else if (data = '#')
+				else if (data == '#')
 				{
 					board[y][x] = 1;
 				}
@@ -102,57 +103,101 @@ int main(int argc, char **argv)
 		//primary game loop
 		while (1 == 1)
 		{
-			draw();
-			change(B,S);
+			draw(board[h][w]);
+			change(board[h][w], B[1], S[2]);
 			usleep(250000);
-			printf('\n\n\n');
+			printf("\n\n\n");
 		}
+	}
 }
 
 
 
-def change(board,B,S):    
-    global h
-    global w
-    changes = [[0 for x in range(w)] for y in range(h)]
+void change(board[w][h], B[1], S[2])
+{
+	int b_size = sizeof(B) / sizeof(int);
+	int s_size = sizeof(S) / sizeof(int);
+	
+	int changes[h][w];
+	for (int y  = 0; y < h; y++)
+	{
+		for (int x = 0; x < w; x++)
+		{
+			changes[y][x] = 0;
+		}
+	}
+	
+	//find what changes need to be made
+	int neigh;
+	for (int y  = 0; y < h; y++)
+	{
+		for (int x = 0; x < w; x++)
+		{
+			neigh = 0;
+			//count live neighbors
+			for (int offy = -1; offy < 2; offy++)
+			{
+				for (int offx = -1; offx < 2; offx++)
+				{
+					//do not count self as a neighbor
+					if (offy != 0 && offx != 0)
+					{
+						neigh += board[(y + offy) % h][(x + offx) % w];
+					}
+				}
+			}
+			//birth
+			if (board[y][x] == 0)
+			{
+				for (int b = 0; b < b_size; b++)
+				{
+					if (B[b] == neigh)
+					{
+						changes[y][x] = 1;
+					}
+				}
+			}
+			else
+			{
+				int found;
+				for (int s = 0; s < s_size; s++)
+				{
+					if (S[s] == neigh)
+					{
+						found = 1;
+					}
+				}
+					
+				//if not found in S
+				if (found != 1)
+				{
+					changes[y][x] = 1;
+				}
+			}
+		}
+	}
+	
+	//xor array of changes needed with board
+	for (int y  = 0; y < h; y++)
+	{
+		for (int x = 0; x < w; x++)
+		{
+			//thanks to Matt Ball on StackOverflow: https://stackoverflow.com/questions/17024355/is-there-a-logical-boolean-xor-function-in-c-or-c-standard-library
+			board[y][x] = (board[y][x] != changes[y][x])? 1: 0;
+		}
+	}
+}
 
-    #find what changes need to be made
-    for y in range(h):
-        for x in range(w):
-            #count live neighbors
-            neigh = 0
-            for offy in range(-1, 2):
-                for offx in range(-1, 2):
-                    if not (offy == 0 and offx == 0):
-                        #do not count self as a neighbor
-                        neigh += board[(y + offy) % h][(x + offx) % w]
 
-            #program in rule
-            #birth
-            if board[y][x] == 0 and neigh in B:
-                changes[y][x] = 1
-            #death
-            if board[y][x] == 1 and not neigh in S:
-                changes[y][x] = 1
-
-    #xor array of changes needed with board and return new board
-    for y in range(h):
-        for x in range(w):
-            board[y][x] = int(bool(board[y][x]) ^ bool(changes[y][x]))
-
-    return board
-
-
-def draw(board):
-    global h
-    global w
-    for y in range(h):
-        for x in range(w):
-            if board[y][x] == 1:
-                print('#', end="")
-            elif board[y][x] == 0:
-                print('.', end="")
-        print('')
-
-if __name__ == "__main__":
-    main(sys.argv)
+void draw(board[h][w])
+{
+	
+	for (int y  = 0; y < h; y++)
+	{
+		for (int x = 0; x < w; x++)
+		{
+			printf((board[y][x] == 1)? "#": ".");
+		}
+		printf("\n");
+	}
+}
