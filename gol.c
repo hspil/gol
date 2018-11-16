@@ -8,11 +8,17 @@ Conway's Game of Life
 
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 //global height and width of board, board
 
 int h, w;
+
+//prototypes
+void change(int *board[w][h], int B[1], int S[2]);
+void draw(int board[h][w]);
+
 
 int main(int argc, char **argv)
 {
@@ -31,7 +37,7 @@ int main(int argc, char **argv)
 	char* filename = argv[1];
 	
 	//pull width and height for board from command line argument and store into global width and height
-	w = atoi(argv[2]);
+	//w = atoi(argv[2]);
     h = atoi(argv[3]);
     
     int board[h][w];
@@ -61,7 +67,8 @@ int main(int argc, char **argv)
 		}
 		//close file
 		fclose(fp);
-		printf(filename + " created.");
+		printf("%s", filename);
+		printf(" created.");
 		printf("Open the file in a text editor and change full stops to octothorpes before running this program again.");
 		return 0;
 	}
@@ -77,7 +84,9 @@ int main(int argc, char **argv)
 			{
 				data = fgetc(fp);
 				//Don't store newline chars, read off another char
-				if (data == '\n')
+				switch (data) {
+					
+				case '\n'
 				{
 					data = fgetc(fp);
 				}
@@ -85,7 +94,7 @@ int main(int argc, char **argv)
 				{
 					board[y][x] = 0;
 				}
-				else if (data == '#')
+				if (data == '#')
 				{
 					board[y][x] = 1;
 				}
