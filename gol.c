@@ -16,11 +16,11 @@ Conway's Game of Life
 int h, w;
 
 //prototypes
-void change(int *board[w][h], int B[1], int S[2]);
-void draw(int board[h][w]);
+void change(int board[h][w], int B[1], int S[2]);
+void draw(int* board);
 
 
-int main(int argc, char **argv)
+int main(int argc, char* argv[])
 {
 	//B3/S23 rule
 	int B[1] = {3};
@@ -86,20 +86,18 @@ int main(int argc, char **argv)
 				//Don't store newline chars, read off another char
 				switch (data) {
 					
-				case '\n'
-				{
+				case '\n':
 					data = fgetc(fp);
-				}
-				if (data == '.');
-				{
+					
+				case '.':
 					board[y][x] = 0;
-				}
-				if (data == '#')
-				{
+					break;
+					
+				case '#':
 					board[y][x] = 1;
-				}
-				else
-				{
+					break;
+				
+				default:
 					fclose(fp);
 					printf("Error: File malformed.\n");
 					return 2;
@@ -113,7 +111,7 @@ int main(int argc, char **argv)
 		while (1 == 1)
 		{
 			draw(board[h][w]);
-			change(board[h][w], B[1], S[2]);
+			change(board, B, S);
 			usleep(250000);
 			printf("\n\n\n");
 		}
@@ -122,7 +120,7 @@ int main(int argc, char **argv)
 
 
 
-void change(board[w][h], B[1], S[2])
+void change(int *board, int *B, int *S)
 {
 	int b_size = sizeof(B) / sizeof(int);
 	int s_size = sizeof(S) / sizeof(int);
@@ -198,7 +196,7 @@ void change(board[w][h], B[1], S[2])
 }
 
 
-void draw(board[h][w])
+void draw(int board[h][w])
 {
 	
 	for (int y  = 0; y < h; y++)
