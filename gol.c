@@ -64,51 +64,49 @@ int main(int argc, char* argv[])
 		printf("Open the file in a text editor and change full stops to octothorpes before running this program again.");
 		return 0;
 	}
-	else
-	{
-		char data;
 
-		// Read file and store into board array
-		FILE *fp;
-		fp = fopen(filename, "r");
-		for(int y = 0; y < h; y++)
+	char data;
+
+	// Read file and store into board array
+	FILE *fp;
+	fp = fopen(filename, "r");
+	for(int y = 0; y < h; y++)
+	{
+		for(int x = 0; x < w; x++)
 		{
-			for(int x = 0; x < w; x++)
-			{
+			data = fgetc(fp);
+
+			// Don't store newline chars, read off another char
+			switch (data) {
+
+			case '\n':
 				data = fgetc(fp);
 
-				// Don't store newline chars, read off another char
-				switch (data) {
+			case '.':
+				board[y][x] = 0;
+				break;
 
-				case '\n':
-					data = fgetc(fp);
+			case '#':
+				board[y][x] = 1;
+				break;
 
-				case '.':
-					board[y][x] = 0;
-					break;
-
-				case '#':
-					board[y][x] = 1;
-					break;
-
-				default:
-					fclose(fp);
-					printf("Error: File malformed.\n");
-					return 1;
-				}
+			default:
+				fclose(fp);
+				printf("Error: File malformed.\n");
+				return 1;
 			}
 		}
+	}
 
-		fclose(fp);
+	fclose(fp);
 
-		// Primary game loop
-		while (1 == 1)
-		{
-			draw(board[h][w]);
-			change(board, B, S);
-			usleep(250000);
-			printf("\n\n\n");
-		}
+	// Primary game loop
+	while (1 == 1)
+	{
+		draw(board[h][w]);
+		change(board, B, S);
+		usleep(250000);
+		printf("\n\n\n");
 	}
 }
 
