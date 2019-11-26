@@ -39,7 +39,8 @@ int main(int argc, char* argv[])
 
 	memset(board, 0, sizeof(board[0][0]) * boardWidth * boardHeight);
 
-	// If file does not exist, create a new one and populate it with periods
+	// If file does not exist, create a new one and populate it with periods,
+	// using the dimensions specified on the command line
 	if (access(filename, F_OK) == -1)
 	{
 		FILE *fp;
@@ -56,7 +57,7 @@ int main(int argc, char* argv[])
 
 		fclose(fp);
 		printf("%s created.\n", filename);
-		printf("Open the file in a text editor and change full stops to octothorpes before running this program again.");
+		printf("Open the file in a text editor and change full stops to octothorpes before running this program again.\n");
 		return 0;
 	}
 
