@@ -13,9 +13,9 @@ Conway's Game of Life
 
 
 // Global height and width of board
-int h, w;
+int boardHeight, boardWidth;
 
-void change(int board[h][w], int B[1], int S[2]);
+void change(int board[boardHeight][boardWidth], int B[1], int S[2]);
 void draw(int* board);
 
 int main(int argc, char* argv[])
@@ -33,12 +33,12 @@ int main(int argc, char* argv[])
 	}
 
 	char* filename = argv[1];
-	h = atoi(argv[3]);
-	int board[h][w];
+	boardHeight = atoi(argv[3]);
+	int board[boardHeight][boardWidth];
 
-	for (int i = 0; i < h; i++)
+	for (int i = 0; i < boardHeight; i++)
 	{
-		for (int j = 0; j < w; j++)
+		for (int j = 0; j < boardWidth; j++)
 		{
 			board[i][j] = 0;
 		}
@@ -50,9 +50,9 @@ int main(int argc, char* argv[])
 		FILE *fp;
 		fp = fopen(filename, "w");
 
-		for (int y = 0; y < h; y++)
+		for (int y = 0; y < boardHeight; y++)
 		{
-			for (int x = 0; x < w; x++)
+			for (int x = 0; x < boardWidth; x++)
 			{
 				fprintf(fp, ".");
 			}
@@ -70,9 +70,9 @@ int main(int argc, char* argv[])
 	// Read file and store into board array
 	FILE *fp;
 	fp = fopen(filename, "r");
-	for(int y = 0; y < h; y++)
+	for(int y = 0; y < boardHeight; y++)
 	{
-		for(int x = 0; x < w; x++)
+		for(int x = 0; x < boardWidth; x++)
 		{
 			data = fgetc(fp);
 
@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
 	// Primary game loop
 	while (1 == 1)
 	{
-		draw(board[h][w]);
+		draw(board[boardHeight][boardWidth]);
 		change(board, B, S);
 		usleep(250000);
 		printf("\n\n\n");
@@ -116,22 +116,22 @@ void change(int *board, int *B, int *S)
 	int b_size = sizeof(B) / sizeof(int);
 	int s_size = sizeof(S) / sizeof(int);
 
-	int changes[h][w];
-	for (int y  = 0; y < h; y++)
+	int changes[boardHeight][boardWidth];
+	for (int y  = 0; y < boardHeight; y++)
 	{
-		for (int x = 0; x < w; x++)
+		for (int x = 0; x < boardWidth; x++)
 		{
 			changes[y][x] = 0;
 		}
 	}
 
 	// Find what changes need to be made
-	int neigh;
-	for (int y  = 0; y < h; y++)
+	int neighbor;
+	for (int y  = 0; y < boardHeight; y++)
 	{
-		for (int x = 0; x < w; x++)
+		for (int x = 0; x < boardWidth; x++)
 		{
-			neigh = 0;
+			neighbor = 0;
 
 			// Count living neighbors
 			for (int offy = -1; offy < 2; offy++)
@@ -141,7 +141,7 @@ void change(int *board, int *B, int *S)
 					// Do not count self as a neighbor
 					if (offy != 0 && offx != 0)
 					{
-						neigh += board[(y + offy) % h][(x + offx) % w];
+						neighbor += board[(y + offy) % boardHeight][(x + offx) % boardWidth];
 					}
 				}
 			}
@@ -151,7 +151,7 @@ void change(int *board, int *B, int *S)
 			{
 				for (int b = 0; b < b_size; b++)
 				{
-					if (B[b] == neigh)
+					if (B[b] == neighbor)
 					{
 						changes[y][x] = 1;
 					}
@@ -162,7 +162,7 @@ void change(int *board, int *B, int *S)
 				int found;
 				for (int s = 0; s < s_size; s++)
 				{
-					if (S[s] == neigh)
+					if (S[s] == neighbor)
 					{
 						found = 1;
 					}
@@ -178,9 +178,9 @@ void change(int *board, int *B, int *S)
 	}
 
 	// XOR change array with board array
-	for (int y  = 0; y < h; y++)
+	for (int y  = 0; y < boardHeight; y++)
 	{
-		for (int x = 0; x < w; x++)
+		for (int x = 0; x < boardWidth; x++)
 		{
 			// Thanks to Matt Ball
 			// https://stackoverflow.com/questions/17024355/is-there-a-logical-boolean-xor-function-in-c-or-c-standard-library
@@ -190,11 +190,11 @@ void change(int *board, int *B, int *S)
 }
 
 
-void draw(int board[h][w])
+void draw(int board[boardHeight][boardWidth])
 {
-	for (int y  = 0; y < h; y++)
+	for (int y  = 0; y < boardHeight; y++)
 	{
-		for (int x = 0; x < w; x++)
+		for (int x = 0; x < boardWidth; x++)
 		{
 			printf((board[y][x] == 1)? "#": ".");
 		}
