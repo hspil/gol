@@ -60,8 +60,7 @@ int main(int argc, char* argv[])
 		}
 
 		fclose(fp);
-		printf("%s", filename);
-		printf(" created.");
+		printf("%s created.\n", filename);
 		printf("Open the file in a text editor and change full stops to octothorpes before running this program again.");
 		return 0;
 	}
@@ -95,7 +94,7 @@ int main(int argc, char* argv[])
 				default:
 					fclose(fp);
 					printf("Error: File malformed.\n");
-					return 2;
+					return 1;
 				}
 			}
 		}
