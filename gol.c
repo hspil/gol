@@ -37,13 +37,7 @@ int main(int argc, char* argv[])
 	boardHeight = atoi(argv[3]);
 	int board[boardHeight][boardWidth];
 
-	for (int i = 0; i < boardHeight; i++)
-	{
-		for (int j = 0; j < boardWidth; j++)
-		{
-			board[i][j] = 0;
-		}
-	}
+	memset(board, 0, sizeof(board[0][0]) * boardWidth * boardHeight);
 
 	// If file does not exist, create a new one and populate it with periods
 	if (access(filename, F_OK) == -1)
