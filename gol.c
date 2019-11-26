@@ -7,6 +7,7 @@ Conway's Game of Life
 ***********************************************************************/
 
 #include <unistd.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -101,7 +102,7 @@ int main(int argc, char* argv[])
 	fclose(fp);
 
 	// Primary game loop
-	while (1 == 1)
+	while (true)
 	{
 		draw(board[boardHeight][boardWidth]);
 		change(board, B, S);
@@ -159,17 +160,17 @@ void change(int *board, int *B, int *S)
 			}
 			else
 			{
-				int found;
+				bool found;
 				for (int s = 0; s < s_size; s++)
 				{
 					if (S[s] == neighbor)
 					{
-						found = 1;
+						found = true;
 					}
 				}
 
 				// If not found in S
-				if (found != 1)
+				if (!found)
 				{
 					changes[y][x] = 1;
 				}
