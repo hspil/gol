@@ -11,37 +11,36 @@ Conway's Game of Life
 #include <stdlib.h>
 #include <string.h>
 
-//global height and width of board, board
-
+// global height and width of board, board
 int h, w;
 
-//prototypes
+// prototypes
 void change(int board[h][w], int B[1], int S[2]);
 void draw(int* board);
 
 
 int main(int argc, char* argv[])
 {
-	//B3/S23 rule
+	// B3/S23 rule
 	int B[1] = {3};
-    int S[2] = {2, 3};
-	
-	//Check CLI arguments
+	int S[2] = {2, 3};
+
+	// Check CLI arguments
 	if (argc != 4)
 	{
 		printf("Usage: ./gol <file> <board width> <board height>");
-        return 1;
+		return 1;
 	}
-	
-	//pull filename from CLI argument
+
+	// pull filename from CLI argument
 	char* filename = argv[1];
-	
-	//pull width and height for board from command line argument and store into global width and height
-	//w = atoi(argv[2]);
-    h = atoi(argv[3]);
-    
-    int board[h][w];
-	
+
+	// pull width and height for board from command line argument and store into global width and height
+	// w = atoi(argv[2]);
+	h = atoi(argv[3]);
+
+	int board[h][w];
+
 	for (int i = 0; i < h; i++)
 	{
 		for (int j = 0; j < w; j++)
@@ -49,14 +48,15 @@ int main(int argc, char* argv[])
 			board[i][j] = 0;
 		}
 	}
-	
-	//if file does not exist
+
+	// if file does not exist
 	if (access(filename, F_OK) == -1)
 	{
-		//create file
+		// create file
 		FILE *fp;
 		fp = fopen(filename, "w");
-		//fill with periods
+
+		// fill with periods
 		for (int y = 0; y < h; y++)
 		{
 			for (int x = 0; x < w; x++)
@@ -65,7 +65,8 @@ int main(int argc, char* argv[])
 			}
 			fprintf(fp, "\n");
 		}
-		//close file
+
+		// close file
 		fclose(fp);
 		printf("%s", filename);
 		printf(" created.");
@@ -75,7 +76,8 @@ int main(int argc, char* argv[])
 	else
 	{
 		char data;
-		//read file and store into board array
+
+		// read file and store into board array
 		FILE *fp;
 		fp = fopen(filename, "r");
 		for(int y = 0; y < h; y++)
@@ -83,20 +85,21 @@ int main(int argc, char* argv[])
 			for(int x = 0; x < w; x++)
 			{
 				data = fgetc(fp);
-				//Don't store newline chars, read off another char
+
+				// Don't store newline chars, read off another char
 				switch (data) {
-					
+
 				case '\n':
 					data = fgetc(fp);
-					
+
 				case '.':
 					board[y][x] = 0;
 					break;
-					
+
 				case '#':
 					board[y][x] = 1;
 					break;
-				
+
 				default:
 					fclose(fp);
 					printf("Error: File malformed.\n");
@@ -104,10 +107,11 @@ int main(int argc, char* argv[])
 				}
 			}
 		}
-		//close file
+
+		// close file
 		fclose(fp);
-		
-		//primary game loop
+
+		// primary game loop
 		while (1 == 1)
 		{
 			draw(board[h][w]);
@@ -119,12 +123,11 @@ int main(int argc, char* argv[])
 }
 
 
-
 void change(int *board, int *B, int *S)
 {
 	int b_size = sizeof(B) / sizeof(int);
 	int s_size = sizeof(S) / sizeof(int);
-	
+
 	int changes[h][w];
 	for (int y  = 0; y < h; y++)
 	{
@@ -133,27 +136,29 @@ void change(int *board, int *B, int *S)
 			changes[y][x] = 0;
 		}
 	}
-	
-	//find what changes need to be made
+
+	// find what changes need to be made
 	int neigh;
 	for (int y  = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
 		{
 			neigh = 0;
-			//count live neighbors
+
+			// count live neighbors
 			for (int offy = -1; offy < 2; offy++)
 			{
 				for (int offx = -1; offx < 2; offx++)
 				{
-					//do not count self as a neighbor
+					// do not count self as a neighbor
 					if (offy != 0 && offx != 0)
 					{
 						neigh += board[(y + offy) % h][(x + offx) % w];
 					}
 				}
 			}
-			//birth
+
+			// birth
 			if (board[y][x] == 0)
 			{
 				for (int b = 0; b < b_size; b++)
@@ -174,8 +179,8 @@ void change(int *board, int *B, int *S)
 						found = 1;
 					}
 				}
-					
-				//if not found in S
+
+				// if not found in S
 				if (found != 1)
 				{
 					changes[y][x] = 1;
@@ -183,13 +188,13 @@ void change(int *board, int *B, int *S)
 			}
 		}
 	}
-	
-	//xor array of changes needed with board
+
+	// xor array of changes needed with board
 	for (int y  = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
 		{
-			//thanks to Matt Ball on StackOverflow: https://stackoverflow.com/questions/17024355/is-there-a-logical-boolean-xor-function-in-c-or-c-standard-library
+			// thanks to Matt Ball on StackOverflow: https://stackoverflow.com/questions/17024355/is-there-a-logical-boolean-xor-function-in-c-or-c-standard-library
 			board[y][x] = (board[y][x] != changes[y][x])? 1: 0;
 		}
 	}
@@ -198,7 +203,6 @@ void change(int *board, int *B, int *S)
 
 void draw(int board[h][w])
 {
-	
 	for (int y  = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
